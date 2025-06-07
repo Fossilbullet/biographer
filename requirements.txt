@@ -2,3 +2,4 @@ flask
 dropbox
 python-dotenv
 gunicorn
+replicate
