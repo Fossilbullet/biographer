@@ -15,7 +15,7 @@ image_urls = [
     "https://img.freepik.com/premium-photo/adult-man-serene-face-expression-studio-portrait_53876-75419.jpg?semt=ais_hybrid&w=740",
     "https://media.istockphoto.com/id/507995592/photo/pensive-man-looking-at-the-camera.jpg?s=612x612&w=0&k=20&c=fVoaIqpHo07YzX0-Pw51VgDBiWPZpLyGEahSxUlai7M=",
 ]
-zip_filename = "aifvguser0000001.zip"
+zip_filename = "aifvguser0000002.zip"
 dropbox_dest_path = f"/{zip_filename}"  # Upload location in Dropbox
 
 # === Get Dropbox token from environment variables ===
