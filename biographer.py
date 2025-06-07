@@ -5,6 +5,10 @@ import dropbox
 import re
 import time
 import os
+from flask import Flask
+
+app = Flask(__name__)
+
 
 # === CONFIG ===
 image_urls = [
