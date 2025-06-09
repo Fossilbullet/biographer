@@ -54,6 +54,10 @@ def train_from_urls():
     if not isinstance(image_urls, list) or not all(isinstance(url, str) for url in image_urls):
         return jsonify({"error": "image_urls must be a list of strings"}), 400
 
+    userid = data["userid"]
+    if "userid" not in data:
+        return jsonify({"error": "No User ID provided"}), 400
+    
     temp_dir = tempfile.mkdtemp()
 
     try:
@@ -70,7 +74,7 @@ def train_from_urls():
         trigger_word = filename.split(".")[0]
 
         training = client.trainings.create(
-            destination="fossilbullet/aifvgusermodel0000001",
+            destination=("fossilbullet/aifvgusermodel"+userid),
             version="ostris/flux-dev-lora-trainer:26dce37af90b9d997eeb970d92e47de3064d46c300504ae376c75bef6a9022d2",
             input={
                 "steps": 1000,
