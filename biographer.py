@@ -110,7 +110,7 @@ def train_from_urls():
                 "resolution": "512,768,1024",
                 "autocaption": True,
                 "input_images": dropbox_url,
-                "trigger_word": userid,
+                "trigger_word": ("aifvg"+userid),
                 "learning_rate": 0.0004,
                 "wandb_project": "flux_train_replicate",
                 "wandb_save_interval": 100,
