@@ -12,8 +12,33 @@ import zipfile
 app = Flask(__name__)
 
 # === Dropbox and Replicate tokens from environment ===
-DROPBOX_TOKEN = os.getenv("DROPBOX_ACCESS_TOKEN")
 REPLICATE_TOKEN = os.getenv("REPLICATE_API_TOKEN")
+refresh_token = os.getenv("DROPBOX_REFRESH_TOKEN")
+client_id = os.getenv("DROPBOX_APP_KEY")
+client_secret = os.getenv("DROPBOX_APP_SECRET")
+
+def get_fresh_dropbox_token():
+    
+    if not refresh_token:
+        return jsonify({"error": "Dropbox Refresh Token Key not set in environment"}), 500
+    
+    if not client_id:
+        return jsonify({"error": "Dropbox Client_ID Key not set in environment"}), 500
+    
+    if not client_secret:
+        return jsonify({"error": "Dropbox Client Secret Key not set in environment"}), 500
+    
+    response = requests.post("https://api.dropbox.com/oauth2/token", data={
+        "grant_type": "refresh_token",
+        "refresh_token": refresh_token,
+        "client_id": client_id,
+        "client_secret": client_secret
+    })
+
+    if response.status_code == 200:
+        return response.json()["access_token"]
+    else:
+        raise Exception(f"Failed to refresh Dropbox token: {response.text}")
 
 # === Dropbox Upload ===
 def upload_to_dropbox(zip_path, dropbox_path, token):
@@ -57,7 +82,9 @@ def train_from_urls():
     userid = data["userid"]
     if "userid" not in data:
         return jsonify({"error": "No User ID provided"}), 400
-    
+
+    DROPBOX_TOKEN = get_fresh_dropbox_token()
+
     temp_dir = tempfile.mkdtemp()
 
     try:
@@ -71,7 +98,6 @@ def train_from_urls():
 
         # Start Replicate training
         client = replicate.Client(api_token=REPLICATE_TOKEN)
-        trigger_word = filename.split(".")[0]
 
         training = client.trainings.create(
             destination=("fossilbullet/aifvgusermodel"+userid),
@@ -84,7 +110,7 @@ def train_from_urls():
                 "resolution": "512,768,1024",
                 "autocaption": True,
                 "input_images": dropbox_url,
-                "trigger_word": trigger_word,
+                "trigger_word": userid,
                 "learning_rate": 0.0004,
                 "wandb_project": "flux_train_replicate",
                 "wandb_save_interval": 100,
