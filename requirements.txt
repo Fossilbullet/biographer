@@ -3,3 +3,4 @@ dropbox
 python-dotenv
 gunicorn
 replicate
+flask-cors

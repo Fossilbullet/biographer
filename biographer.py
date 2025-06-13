@@ -8,8 +8,10 @@ from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
 import tempfile
 import zipfile
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, origins=["https://a-i-face-video-generator-wnb1vi.flutterflow.app/"])
 
 # === Dropbox and Replicate tokens from environment ===
 REPLICATE_TOKEN = os.getenv("REPLICATE_API_TOKEN")
