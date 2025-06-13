@@ -11,7 +11,7 @@ import zipfile
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, origins=["https://a-i-face-video-generator-wnb1vi.flutterflow.app/"])
+CORS(app, resources={r"/*": {"origins": "https://a-i-face-video-generator-wnb1vi.flutterflow.app"}}, supports_credentials=True)
 
 # === Dropbox and Replicate tokens from environment ===
 REPLICATE_TOKEN = os.getenv("REPLICATE_API_TOKEN")
